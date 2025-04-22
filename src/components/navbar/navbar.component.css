@@ -1,0 +1,35 @@
+/* filepath: c:\Users\user1\Documents\Miri\hw\project\Auto1040.Angular.Admin\adminProject\src\components\navbar\navbar.component.scss */
+:host ::ng-deep .mat-toolbar {
+    background-color: #F8F9FA;
+    color: #2E4F7A;
+    height: 70px;
+  }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+  }
+
+  .navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+  
+  .navbar-logo {
+    height: 40px;
+    object-fit: contain;
+  }
+  
+  .navbar-button {
+    margin: 0 8px;
+    color: #2E4F7A !important;
+  }
+  .navbar-button:hover {
+    color: #C62D21 !important; 
+  }
+  
+  button.mat-icon-button:hover {
+    color: #C62D21 !important; 
+  }
