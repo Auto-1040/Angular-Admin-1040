@@ -1,0 +1,49 @@
+.user-management-container {
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mat-toolbar {
+  background-color: #1976d2; /* Same as navbar primary color */
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+.user-table-container {
+  margin-top: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+.add-user-button {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background-color: #1976d2; /* Same as navbar primary color */
+  color: white;
+}
+
+.mat-chip {
+  background-color: #1976d2; /* Same as navbar primary color */
+  color: white;
+}
+
+.user-management-container {
+  padding: 16px;
+}
+
+.user-table-container {
+  margin-top: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+.mat-chip {
+  margin: 4px;
+  font-size: 14px;
+}
