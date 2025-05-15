@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -17,7 +19,9 @@ import { Router } from '@angular/router';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule,
+    MatProgressBarModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -25,6 +29,9 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginError = false;
   loginForm: FormGroup;
+  isLoading = false;
+  hidePassword = true;
+  
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -34,6 +41,8 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isLoading = true;
+      this.loginError = false;
       const { username, password } = this.loginForm.value;
 
       // Call the login method and subscribe to the response
@@ -44,6 +53,10 @@ export class LoginComponent {
         },
         error: () => {
           this.loginError = true;
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
         }
       });
     }

@@ -1,16 +1,15 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { map, take } from 'rxjs/operators';
-import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const userService = inject(UserService);
+  const authService = inject(AuthService);
   
-      if (userService.getCurrentUser() !== null) {
+      if (authService.isAuthenticated()) {
         return true;
       } else {
-        router.navigate(['/login']); // Navigate to login page if not authorized
+        router.navigate(['/login']); 
         return false;
       }
  }

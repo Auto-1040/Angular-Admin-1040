@@ -13,7 +13,7 @@ export class UserService {
   private currentUser: UserModel | null = null;
 
   constructor(private http: HttpClient) { }
-  setCurrentUser(user: UserModel): void {
+  setCurrentUser(user: UserModel|null): void {
     this.currentUser = user;
   }
 

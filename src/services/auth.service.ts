@@ -24,11 +24,20 @@ export class AuthService {
             throw new Error('User is not an admin');
           }
         }),
-        map((response: any) => !!response?.token), // Map response to a boolean
-        catchError((err) => {
+        map((response: any) => !!response?.token), 
+               catchError((err) => {
           console.error('Login failed:', err.message || err);
-          return throwError(() => err); // Re-throw the error for further handling
+          return throwError(() => err); 
         })
       );
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('token');
+    this.userService.setCurrentUser(null);
+  }
+
+  isAuthenticated(): boolean {
+    return !!sessionStorage.getItem('token');
   }
 }

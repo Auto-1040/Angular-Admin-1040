@@ -1,24 +1,129 @@
-<mat-toolbar color="primary" class="navbar">
-    <div class="navbar-left">
-        <img src="assets/ez1040logo2.png" alt="Auto 1040 Logo" class="navbar-logo" />
-        @if(!user?.id) {
-        <a routerLink="/login" mat-button class="navbar-button">
+<div class="navbar-container">
+    <mat-toolbar class="navbar">
+      <div class="navbar-left">
+        <button mat-icon-button class="menu-button" (click)="toggleMobileMenu()" matTooltip="Menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        
+        <div class="logo-container" (click)="navigateToHome()">
+          <img src="assets/ez1040logo2.png" alt="EZ1040 Logo" class="navbar-logo" />
+        </div>
+      </div>
+  
+      <div class="navbar-center">
+        <div class="nav-links">
+          <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" mat-button class="nav-link">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </a>
+          
+          <a routerLink="/activity" routerLinkActive="active-link" mat-button class="nav-link">
+            <mat-icon>analytics</mat-icon>
+            <span>Activity Report</span>
+          </a>
+          
+          <a routerLink="/users" routerLinkActive="active-link" mat-button class="nav-link">
+            <mat-icon>people</mat-icon>
+            <span>User Management</span>
+          </a>
+        </div>
+      </div>
+  
+      <div class="navbar-right">
+        @if(user?.id) {
+          <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+            <div class="user-avatar">
+              {{ user.userName?.charAt(0).toUpperCase() || 'A' }}
+            </div>
+            <span class="user-name">{{ user.userName || 'Admin' }}</span>
+            <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+          
+          <mat-menu #userMenu="matMenu" class="user-menu">
+            <div class="user-menu-header">
+              <div class="user-avatar large">
+                {{ user.userName?.charAt(0).toUpperCase() || 'A' }}
+              </div>
+              <div class="user-info">
+                <h3>{{ user.userName || 'Admin' }}</h3>
+                <p>{{ user.email || 'admin@example.com' }}</p>
+              </div>
+            </div>
+            
+            <mat-divider></mat-divider>
+            
+            <button mat-menu-item>
+              <mat-icon>person</mat-icon>
+              <span>My Profile</span>
+            </button>
+            
+            <button mat-menu-item>
+              <mat-icon>settings</mat-icon>
+              <span>Settings</span>
+            </button>
+            
+            <mat-divider></mat-divider>
+            
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        } @else {
+          <a routerLink="/login" mat-button class="login-button">
             <mat-icon>login</mat-icon>
-            Log in
-        </a>
+            <span>Log in</span>
+          </a>
         }
+      </div>
+    </mat-toolbar>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+      <div class="mobile-menu-header">
+        <img src="assets/ez1040logo2.png" alt="EZ1040 Logo" class="mobile-logo" />
+        <button mat-icon-button (click)="toggleMobileMenu()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      
+      <div class="mobile-nav-links">
+        <a routerLink="/" (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </a>
+        
+        <a routerLink="/activity" (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <mat-icon>analytics</mat-icon>
+          <span>Activity Report</span>
+        </a>
+        
+        <a routerLink="/users" (click)="toggleMobileMenu()" class="mobile-nav-link">
+          <mat-icon>people</mat-icon>
+          <span>User Management</span>
+        </a>
+      </div>
+      
+      @if(user?.id) {
+        <div class="mobile-user-section">
+          <div class="mobile-user-info">
+            <div class="user-avatar large">
+              {{ user.userName?.charAt(0).toUpperCase() || 'A' }}
+            </div>
+            <div>
+              <h3>{{ user.userName || 'Admin' }}</h3>
+              <p>{{ user.email || 'admin@example.com' }}</p>
+            </div>
+          </div>
+          
+          <button mat-raised-button color="warn" (click)="logout()" class="mobile-logout-button">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+          </button>
+        </div>
+      }
     </div>
-
-
-    <div class="navbar-right">
-        <button routerLink="/activity" mat-button class="navbar-button">
-            Activity Report
-        </button>
-        <button routerLink="/users" mat-button class="navbar-button">
-            User Management
-        </button>
-        <button mat-icon-button (click)="navigateToHome()" class="navbar-button">
-            <mat-icon>home</mat-icon>
-        </button>
-    </div>
-</mat-toolbar>
+    
+    <!-- Overlay for mobile menu -->
+    <div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
+  </div>

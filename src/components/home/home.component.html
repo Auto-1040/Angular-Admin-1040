@@ -1,1 +1,123 @@
-<p>home works!</p>
+<div class="home-container">
+    <div class="dashboard-header">
+      <h1>EZ1040-ADMIN Dashboard</h1>
+      <p class="welcome-message">Welcome back, Admin</p>
+    </div>
+  
+    @if (isLoading) {
+      <div class="loading-container">
+        <div class="pulse-loader"></div>
+        <p>Loading dashboard data...</p>
+      </div>
+    } @else if (error) {
+      <div class="error-container">
+        <mat-icon class="error-icon">error</mat-icon>
+        <p>Error loading dashboard data. Please try again later.</p>
+      </div>
+    } @else {
+      <div class="dashboard-content">
+        <div class="stats-row">
+          <div class="stat-card users-card">
+            <div class="stat-icon">
+              <mat-icon>people</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalUsers }}</span>
+              <span class="stat-label">Total Users</span>
+            </div>
+            <div class="stat-action">
+              <button mat-button routerLink="/users">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+  
+          <div class="stat-card forms-card">
+            <div class="stat-icon">
+              <mat-icon>description</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalForms }}</span>
+              <span class="stat-label">Total Forms</span>
+            </div>
+            <div class="stat-action">
+              <button mat-button routerLink="/activity">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+  
+          <div class="stat-card year-card">
+            <div class="stat-icon">
+              <mat-icon>event</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ formsThisYear }}</span>
+              <span class="stat-label">Forms ({{ currentYear }})</span>
+            </div>
+            <div class="stat-action">
+              <button mat-button routerLink="/activity">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <div class="charts-row">
+          <div class="chart-card">
+            <h2>Forms by Year</h2>
+            <div class="chart-container">
+              <ngx-charts-pie-chart
+                [results]="formsByYearData"
+                [gradient]="true"
+                [legend]="true"
+                [labels]="true"
+                [doughnut]="true"
+                [arcWidth]="0.5"
+                [animations]="true">
+              </ngx-charts-pie-chart>
+            </div>
+          </div>
+  
+          <div class="chart-card">
+            <h2>Activity Trend (Last 6 Months)</h2>
+            <div class="chart-container">
+              <ngx-charts-bar-vertical
+                [results]="activityTrend"
+                [gradient]="true"
+                [xAxis]="true"
+                [yAxis]="true"
+                [showXAxisLabel]="true"
+                [showYAxisLabel]="true"
+                [xAxisLabel]="'Month'"
+                [yAxisLabel]="'Forms'"
+                [animations]="true">
+              </ngx-charts-bar-vertical>
+            </div>
+          </div>
+        </div>
+  
+        <div class="quick-actions">
+          <h2>Quick Actions</h2>
+          <div class="action-buttons">
+            <button mat-raised-button class="action-button" routerLink="/users">
+              <mat-icon>person_add</mat-icon>
+              <span>Add New User</span>
+            </button>
+            <button mat-raised-button class="action-button" routerLink="/activity">
+              <mat-icon>assessment</mat-icon>
+              <span>View Activity Report</span>
+            </button>
+            <button mat-raised-button class="action-button">
+              <mat-icon>settings</mat-icon>
+              <span>Settings</span>
+            </button>
+            <button mat-raised-button class="action-button">
+              <mat-icon>help</mat-icon>
+              <span>Help</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
