@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ElementRef, ViewChild } from '@angular/core';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -7,13 +7,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserModel } from '../../models/user.model';
-import { MatChipInputEvent, MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { Observable } from 'rxjs';
+import { finalize } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-user-dialog',
@@ -29,8 +31,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatOptionModule,
     CommonModule,
     MatIconModule,
-    CommonModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatProgressBarModule
   ],
   templateUrl: './user-dialog.component.html',
   styleUrl: './user-dialog.component.css'
@@ -41,7 +44,10 @@ export class UserDialogComponent {
   allRoles: string[] = ['User', 'Admin']; 
   roleCtrl = new FormControl('');
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  addOnBlur = true;
+  isLoading = false;
+  hidePassword = true;
+  
+  @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
   
   constructor(
     private fb: FormBuilder,
@@ -53,9 +59,8 @@ export class UserDialogComponent {
     this.userForm = this.fb.group({
       userName: [data?.user?.userName || '', Validators.required],
       email: [data?.user?.email || '', [Validators.required, Validators.email]],
-      password: [data?.mode === 'add' ? '' : null, data.mode === 'add' ? Validators.required : null]
+      password: [data?.mode === 'add' ? '' : null, data.mode === 'add' ? [Validators.required, Validators.minLength(6)] : null]
     });
-    this.roles = data?.user?.roles || [];
   }
 
   removeRole(role: string): void {
@@ -74,28 +79,45 @@ export class UserDialogComponent {
     this.roleCtrl.setValue(null);
   }
   
-  selected(event: any): void {
+  selected(event: MatAutocompleteSelectedEvent): void {
     const value = event.option.viewValue;
     if (value && this.allRoles.includes(value) && !this.roles.includes(value)) {
       this.roles.push(value);
     }
+    this.roleInput.nativeElement.value = '';
     this.roleCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.allRoles.filter(role => role.toLowerCase().includes(filterValue));
+  save(): void {
+    if (this.userForm.valid && this.roles.length > 0) {
+      this.isLoading = true;
+      const user = { ...this.userForm.value, roles: this.roles };
+      
+      if (this.data.mode === 'add') {
+        this.userService.addUser(user)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe({
+            next: () => this.dialogRef.close(true),
+            error: (error) => console.error('Error adding user:', error)
+          });
+      } else {
+        this.userService.updateUser(this.data.user.id, user)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe({
+            next: () => this.dialogRef.close(true),
+            error: (error) => console.error('Error updating user:', error)
+          });
+      }
+    } else {
+      this.validateAllFormFields();
+    }
   }
 
-  save(): void {
-    if (this.userForm.valid) {
-      const user = { ...this.userForm.value, roles: this.roles };
-      if (this.data.mode === 'add') {
-        this.userService.addUser(user).subscribe(() => this.dialogRef.close(true));
-      } else if (this.data.mode === 'edit') {
-        this.userService.updateUser(this.data.user.id, user).subscribe(() => this.dialogRef.close(true));
-      }
-    }
+  validateAllFormFields() {
+    Object.keys(this.userForm.controls).forEach(field => {
+      const control = this.userForm.get(field);
+      control?.markAsTouched({ onlySelf: true });
+    });
   }
 
   cancel(): void {

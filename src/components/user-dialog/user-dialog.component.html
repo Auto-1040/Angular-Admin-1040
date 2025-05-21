@@ -1,66 +1,136 @@
-<h2 mat-dialog-title class="dialog-title">{{ data.mode === 'add' ? 'Add User' : 'Edit User' }}</h2>
+<div class="dialog-wrapper">
+  <!-- Progress Bar -->
+  @if (isLoading) {
+    <div class="progress-container">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  }
 
-<mat-dialog-content class="dialog-content">
-    <form [formGroup]="userForm" class="user-dialog-form">
-        <!-- Name Field -->
-        <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="userName" placeholder="Enter user's name" />
-            @if(userForm.get('userName')?.hasError('required')) {
+  <!-- Dialog Header -->
+  <div class="dialog-header">
+    <div class="mode-indicator" [class.edit-mode]="data.mode === 'edit'">
+      <mat-icon>{{ data.mode === 'add' ? 'person_add' : 'edit' }}</mat-icon>
+    </div>
+    <h2>{{ data.mode === 'add' ? 'Add New User' : 'Edit User' }}</h2>
+  </div>
+
+  <!-- Dialog Content -->
+  <div class="dialog-content">
+    <form [formGroup]="userForm" class="user-form">
+      <!-- User Information -->
+      <div class="form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="userName" placeholder="Enter user's name" />
+          <mat-icon matSuffix>person</mat-icon>
+          @if(userForm.get('userName')?.hasError('required') && userForm.get('userName')?.touched) {
             <mat-error>Name is required</mat-error>
-            }
+          }
         </mat-form-field>
 
-        <!-- Email Field -->
-        <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" placeholder="Enter user's email" />
-            @if(userForm.get('email')?.hasError('required')) {
+        <mat-form-field appearance="outline">
+          <mat-label>Email Address</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="Enter user's email" />
+          <mat-icon matSuffix>email</mat-icon>
+          @if(userForm.get('email')?.hasError('required') && userForm.get('email')?.touched) {
             <mat-error>Email is required</mat-error>
-            }
-            @if(userForm.get('email')?.hasError('email')) {
-            <mat-error>Please enter a valid email address</mat-error>
-            }
+          }
+          @if(userForm.get('email')?.hasError('email') && !userForm.get('email')?.hasError('required')) {
+            <mat-error>Please enter a valid email</mat-error>
+          }
         </mat-form-field>
 
-        <!-- Password Field (Only for Add Mode) -->
         @if(data.mode === 'add') {
-        <mat-form-field appearance="fill" class="full-width">
+          <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" formControlName="password" placeholder="Enter a password" />
-            @if(userForm.get('password')?.hasError('required')) {
-            <mat-error>Password is required</mat-error>
+            <input 
+              matInput 
+              [type]="hidePassword ? 'password' : 'text'" 
+              formControlName="password" 
+              placeholder="Create a password"
+            />
+            <button 
+              type="button"
+              mat-icon-button 
+              matSuffix 
+              (click)="hidePassword = !hidePassword"
+            >
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            @if(userForm.get('password')?.hasError('required') && userForm.get('password')?.touched) {
+              <mat-error>Password is required</mat-error>
             }
-        </mat-form-field>
+            @if(userForm.get('password')?.hasError('minlength') && !userForm.get('password')?.hasError('required')) {
+              <mat-error>Password must be at least 6 characters</mat-error>
+            }
+          </mat-form-field>
         }
+      </div>
 
-        <!-- Roles Management -->
-        <mat-form-field class="example-chip-list full-width">
-            <mat-label>Roles</mat-label>
-            <mat-chip-grid #chipGrid aria-label="Role selection">
-              @for (role of roles; track role) {
-                <mat-chip-row (removed)="removeRole(role)">
-                  {{ role }}
-                  <button matChipRemove [attr.aria-label]="'Remove ' + role">
-                    <mat-icon>cancel</mat-icon>
-                  </button>
-                </mat-chip-row>
-              }
-            </mat-chip-grid>
-            <input placeholder="New Role..." #roleInput [formControl]="roleCtrl"
-                   [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
-                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                   (matChipInputTokenEnd)="addRole($event)" />
+      <!-- Roles Section -->
+      <div class="roles-section">
+        <div class="section-header">
+          <h3>User Roles</h3>
+          <span class="required-indicator">Required</span>
+        </div>
+
+        <div class="roles-container">
+          <div class="selected-roles">
+            @for (role of roles; track role) {
+              <div class="role-chip" [class]="role.toLowerCase()">
+                {{ role }}
+                <button type="button" class="remove-btn" (click)="removeRole(role)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+
+          <mat-form-field appearance="outline" class="role-field">
+            <mat-label>Add Role</mat-label>
+            <input 
+              matInput
+              placeholder="Select a role"
+              #roleInput
+              [formControl]="roleCtrl"
+              [matChipInputFor]="chipGrid"
+              [matAutocomplete]="auto"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addRole($event)"
+            />
+            <mat-icon matSuffix>add_circle</mat-icon>
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
               @for (role of allRoles; track role) {
-                <mat-option [value]="role">{{ role }}</mat-option>
+                @if (!roles.includes(role)) {
+                  <mat-option [value]="role">{{ role }}</mat-option>
+                }
               }
             </mat-autocomplete>
+            <mat-chip-grid #chipGrid aria-label="Role selection" class="hidden-chip-grid"></mat-chip-grid>
           </mat-form-field>
+        </div>
+      </div>
     </form>
-</mat-dialog-content>
+  </div>
 
-<mat-dialog-actions align="end">
-    <button mat-button class="cancel-button" (click)="cancel()">Cancel</button>
-    <button mat-raised-button color="primary" class="save-button" [disabled]="userForm.invalid" (click)="save()">Save</button>
-</mat-dialog-actions>
+  <!-- Dialog Actions -->
+  <div class="dialog-actions">
+    <button 
+      mat-button 
+      class="cancel-btn" 
+      (click)="cancel()"
+      [disabled]="isLoading"
+    >
+      Cancel
+    </button>
+    <button 
+      mat-flat-button 
+      color="primary" 
+      class="save-btn" 
+      [disabled]="userForm.invalid || isLoading || roles.length === 0" 
+      (click)="save()"
+    >
+      {{ data.mode === 'add' ? 'Create User' : 'Save Changes' }}
+    </button>
+  </div>
+</div>

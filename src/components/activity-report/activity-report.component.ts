@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -36,20 +36,32 @@ import { OutputFormDto } from '../../models/output-form.model';
     MatTooltipModule,
     MatProgressSpinnerModule,
     FormsModule,
-    CommonModule,
-    DatePipe
+    CommonModule
   ],
   templateUrl: './activity-report.component.html',
   styleUrl: './activity-report.component.css',
   providers: [DatePipe]
 })
 export class ActivityReportComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'userId', 'year', 'createdAt', 'actions'];
+  displayedColumns: string[] = ['id', 'userId', 'year', 'createdAt'];
   dataSource = new MatTableDataSource<OutputFormDto>();
   isLoading = true;
   error = false;
   years: number[] = [];
   selectedYear: number | null = null;
+
+  // Paginator variables
+  length = 0; 
+  pageSize = 10; 
+  pageIndex = 0; 
+  pageSizeOptions = [5, 10, 25, 50];
+  hidePageSize = false; 
+  showPageSizeOptions = true; 
+  showFirstLastButtons = true; 
+  disabled = false; 
+  pageEvent!: PageEvent; 
+
+  fullData: OutputFormDto[] = []; 
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -65,16 +77,17 @@ export class ActivityReportComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   loadActivityData(): void {
     this.isLoading = true;
     this.error = false;
-    
+
     this.activityReportService.getAllOutputForms().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.fullData = data; 
+        this.length = data.length; 
+        this.updateTableData(); 
         this.extractYears(data);
         this.isLoading = false;
       },
@@ -86,10 +99,29 @@ export class ActivityReportComponent implements OnInit {
     });
   }
 
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.updateTableData(); 
+  }
+
+  updateTableData(): void {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.dataSource.data = this.fullData.slice(startIndex, endIndex); 
+  }
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+  }
+
   extractYears(data: OutputFormDto[]): void {
     const uniqueYears = new Set<number>();
     data.forEach(form => uniqueYears.add(form.year));
-    this.years = Array.from(uniqueYears).sort((a, b) => b - a); // Sort descending
+    this.years = Array.from(uniqueYears).sort((a, b) => b - a);
   }
 
   applyFilter(event: Event): void {
@@ -103,7 +135,7 @@ export class ActivityReportComponent implements OnInit {
 
   filterByYear(year: number | null): void {
     this.selectedYear = year;
-    
+
     if (year === null) {
       this.dataSource.filter = '';
     } else {
@@ -124,10 +156,6 @@ export class ActivityReportComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  viewForm(s3Url: string): void {
-    window.open(s3Url, '_blank');
   }
 
   formatDate(date: Date): string {

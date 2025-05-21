@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   totalUsers = 0;
   totalForms = 0;
   formsThisYear = 0;
-  currentYear = new Date().getFullYear();
+  currentYear = new Date().getFullYear() -1;
   isLoading = true;
   error = false;
   

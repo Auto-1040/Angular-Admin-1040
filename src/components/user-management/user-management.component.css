@@ -1,49 +1,288 @@
 .user-management-container {
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
-.mat-toolbar {
-  background-color: #1976d2; /* Same as navbar primary color */
+.user-header {
+  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
   color: white;
-  border-radius: 8px 8px 0 0;
+  padding: 32px 24px;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(63, 81, 181, 0.2);
 }
 
-.user-table-container {
-  margin-top: 16px;
-  background-color: white;
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.user-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.user-header p {
+  margin: 8px 0 0;
+  opacity: 0.9;
+  font-size: 16px;
+}
+
+.user-content {
+  padding: 0 24px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.search-field {
+  flex: 1;
+  min-width: 250px;
+  margin: 0;
+}
+
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.filter-button {
+  background: rgba(63, 81, 181, 0.1);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  padding: 0 16px;
+  height: 40px;
 }
 
-.add-user-button {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  background-color: #1976d2; /* Same as navbar primary color */
-  color: white;
+.filter-button mat-icon {
+  margin-right: 8px;
 }
 
-.mat-chip {
-  background-color: #1976d2; /* Same as navbar primary color */
-  color: white;
-}
-
-.user-management-container {
-  padding: 16px;
-}
-
-.user-table-container {
-  margin-top: 16px;
-  background-color: white;
+.clear-button {
+  height: 40px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
 }
 
-.mat-chip {
-  margin: 4px;
+.add-button {
+  height: 40px;
+  border-radius: 8px;
+  padding: 0 16px;
+  margin-right: 20px;
+
+}
+
+
+.table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.user-table {
+  width: 100%;
+}
+
+.user-row {
+  transition: background-color 0.2s ease;
+}
+
+.user-row:hover {
+  background-color: rgba(63, 81, 181, 0.05);
+}
+
+
+.user-name-content {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between avatar and name */
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #1976d2; /* Primary color */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.user-name-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.role-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.role-chip {
+  height: 28px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.role-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.action-buttons button {
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.action-buttons button:hover {
+  transform: translateY(-2px);
+}
+
+.loading-container, .empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.loading-container p {
+  margin-top: 16px;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #3f51b5;
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.empty-container h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.empty-container p {
+  margin: 0 0 24px;
+  color: #666;
+}
+
+.no-data-cell {
+  padding: 48px 0 !important;
+  text-align: center;
+  color: #666;
+}
+
+.no-data-cell mat-icon {
+  vertical-align: middle;
+  margin-right: 8px;
+  color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-actions {
+    justify-content: space-between;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .action-buttons button {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .action-buttons button mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .role-chips {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+/* Animation for rows */
+.user-row {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom styling for the paginator */
+::ng-deep .mat-mdc-paginator {
+  background: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Custom styling for the table header */
+::ng-deep .mat-mdc-header-row {
+  background-color: rgba(63, 81, 181, 0.05);
+}
+
+::ng-deep .mat-mdc-header-cell {
+  font-weight: 600;
+  color: #333;
 }
