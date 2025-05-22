@@ -44,7 +44,7 @@
 .logo-text {
   font-size: 18px;
   font-weight: 600;
-  color: #3f51b5;
+  color: #2E4F7A;
   letter-spacing: 0.5px;
 }
 
@@ -64,7 +64,7 @@
   padding: 0 16px;
   height: 70px;
   font-weight: 500;
-  color: #555;
+  color:#2E4F7A;
   position: relative;
   transition: color 0.2s ease;
 }
@@ -75,19 +75,19 @@
 }
 
 .nav-link:hover {
-  color: #3f51b5;
+  color: #C62D21;
 }
 
 .nav-link:hover mat-icon {
-  color: #3f51b5;
+  color: #C62D21;
 }
 
 .active-link {
-  color: #3f51b5;
+  color: #2E4F7A;
 }
 
 .active-link mat-icon {
-  color: #3f51b5;
+  color: #2E4F7A;
 }
 
 .active-link::after {
@@ -97,7 +97,7 @@
   left: 16px;
   right: 16px;
   height: 3px;
-  background: #3f51b5;
+  background: #2E4F7A;
   border-radius: 3px 3px 0 0;
 }
 
@@ -111,20 +111,21 @@
   align-items: center;
   padding: 4px 8px;
   border-radius: 24px;
-  background: rgba(63, 81, 181, 0.1);
+  background: #2E4F7A;
   transition: background 0.2s ease;
+  color: white;
 }
 
 .user-button:hover {
-  background: rgba(63, 81, 181, 0.2);
+  background: #C62D21;
 }
 
 .user-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #3f51b5;
-  color: white;
+  background: white;
+  color: #2E4F7A;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,7 +150,7 @@
 .login-button {
   display: flex;
   align-items: center;
-  background: #3f51b5;
+  background: #2E4F7A;
   color: white;
   border-radius: 24px;
   padding: 4px 16px;
@@ -157,14 +158,13 @@
 }
 
 .login-button:hover {
-  background: #303f9f;
+  background: #C62D21;
 }
 
 .login-button mat-icon {
   margin-right: 8px;
 }
 
-/* User Menu Styles */
 .user-menu-header {
   padding: 16px;
   display: flex;
@@ -187,7 +187,6 @@
   color: #666;
 }
 
-/* Mobile Menu Styles */
 .mobile-menu {
   position: fixed;
   top: 0;
@@ -241,7 +240,7 @@
 
 .mobile-nav-link mat-icon {
   margin-right: 16px;
-  color: #3f51b5;
+  color: #2E4F7A;
 }
 
 .mobile-user-section {

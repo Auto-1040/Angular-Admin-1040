@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { ActivityReportService } from '../../services/activity-report.service';
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
   formsThisYear = 0;
   currentYear = new Date().getFullYear() -1;
   isLoading = true;
-  error = false;
+  reqStatus = 200;
   
   // Chart data
   formsByYearData: any[] = [];
@@ -52,7 +52,8 @@ export class HomeComponent implements OnInit {
   
   constructor(
     private userService: UserService,
-    private activityReportService: ActivityReportService
+    private activityReportService: ActivityReportService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -64,7 +65,7 @@ export class HomeComponent implements OnInit {
     this.userService.getAllUsers().pipe(
       catchError(error => {
         console.error('Error loading users:', error);
-        this.error = true;
+        this.reqStatus = error.status;
         return of([]);
       })
     ).subscribe(users => {
@@ -75,7 +76,9 @@ export class HomeComponent implements OnInit {
     this.activityReportService.getAllOutputForms().pipe(
       catchError(error => {
         console.error('Error loading forms:', error);
-        this.error = true;
+        this.reqStatus = error.status;
+        if (error.status === 401) 
+          this.router.navigate(['/login']);
         return of([]);
       })
     ).subscribe(forms => {

@@ -9,12 +9,21 @@
         <div class="pulse-loader"></div>
         <p>Loading dashboard data...</p>
       </div>
-    } @else if (error) {
+    }  @else if (reqStatus == 401) {
+      <div class="unauthorized-container">
+        <mat-icon class="unauthorized-icon">lock</mat-icon>
+        <p class="unauthorized-message">Access denied. Please log in with an admin password.</p>
+        <button mat-raised-button routerLink="/login">
+          <mat-icon>login</mat-icon>
+          <span>Go to Login</span>
+        </button>
+      </div>
+    } @else if (reqStatus != 200) {
       <div class="error-container">
         <mat-icon class="error-icon">error</mat-icon>
         <p>Error loading dashboard data. Please try again later.</p>
       </div>
-    } @else {
+      } @else {
       <div class="dashboard-content">
         <div class="stats-row">
           <div class="stat-card users-card">
