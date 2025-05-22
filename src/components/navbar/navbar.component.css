@@ -72,6 +72,7 @@
 .nav-link mat-icon {
   margin-right: 8px;
   transition: color 0.2s ease;
+  
 }
 
 .nav-link:hover {
@@ -113,8 +114,8 @@
   border-radius: 24px;
   background: #2E4F7A;
   transition: background 0.2s ease;
-  color: white;
 }
+
 
 .user-button:hover {
   background: #C62D21;
@@ -151,7 +152,7 @@
   display: flex;
   align-items: center;
   background: #2E4F7A;
-  color: white;
+  color: white!important;
   border-radius: 24px;
   padding: 4px 16px;
   transition: background 0.2s ease;
@@ -163,6 +164,8 @@
 
 .login-button mat-icon {
   margin-right: 8px;
+  color: white!important;
+
 }
 
 .user-menu-header {

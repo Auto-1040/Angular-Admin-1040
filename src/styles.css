@@ -8,15 +8,34 @@ html, body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
     
   }
-button, 
-.mat-button, 
-.mat-raised-button, 
-.mat-icon-button, 
-.mat-stroked-button, 
-.mat-flat-button, 
-.mat-fab, 
-.mat-mini-fab {
-  color: #2E4F7A !important; 
-  background-color: #f5f5f5 !important;
-}
+mat-icon {
+    color: #2E4F7A !important; 
+    transition: color 0.2s ease;
+  }
+  
+  button, 
+  .mat-button, 
+  .mat-raised-button, 
+  .mat-icon-button, 
+  .mat-stroked-button, 
+  .mat-flat-button, 
+  .mat-fab, 
+  .mat-mini-fab {
+    color: #2E4F7A !important;
+    background-color: #f5f5f5 !important; 
+    transition: background-color 0.2s ease, color 0.2s ease; 
+  }
+  
+  button:hover, 
+  .mat-button:hover, 
+  .mat-raised-button:hover, 
+  .mat-icon-button:hover, 
+  .mat-stroked-button:hover, 
+  .mat-flat-button:hover, 
+  .mat-fab:hover, 
+  .mat-mini-fab:hover,
+  mat-icon:hover {
+    color: #C62D21 !important;
+    background-color: transparent !important; 
+  }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

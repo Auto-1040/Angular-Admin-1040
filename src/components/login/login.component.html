@@ -62,11 +62,15 @@
             class="login-button"
           >
             @if (isLoading) {
-              <mat-icon class="spin-icon">sync</mat-icon>
-              <span>Signing in...</span>
+              <ng-container>
+                <mat-icon class="spin-icon">sync</mat-icon>
+                <span>Signing in...</span>
+              </ng-container>
             } @else {
-              <mat-icon>login</mat-icon>
-              <span>Sign In</span>
+              <ng-container>
+                <mat-icon>login</mat-icon>
+                <span>Sign In</span>
+              </ng-container>
             }
           </button>
         </div>
